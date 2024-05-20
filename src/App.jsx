@@ -1,19 +1,16 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { getAllTickets } from "./services/ticketService.jsx"
 
 export const App = () => {
-  const [count, setCount] = useState(0) // {stateVariable, setterFunction}
-  
-  const handleBtnClick = () => {
-    setCount(count + 1)
-    console.log("clicked!")
-  }
+  const [allTickets, setAllTickets] = useState([])
 
-  return (
-    <>
-      <h1>Hello!</h1>
-      <div>This is amazing!</div>
-      <button className="btn-secondary" onClick={handleBtnClick}>Click me!</button>
-      <div>Count: {count}</div>
-    </>
-  )
+  useEffect(() => {
+    getAllTickets().then(ticketsArray => {
+      setAllTickets(ticketsArray)
+      console.log("tickets set!")
+    })
+  }, [])
+
+
+  return <></>
 }
