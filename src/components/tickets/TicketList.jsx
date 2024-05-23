@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
 import { getAllTickets } from "../../services/ticketService.jsx"
 import "./Tickets.css"
+import { Ticket } from "./Ticket.jsx"
+import { FilterBar } from "./FilterBar.jsx"
 
 export const TicketList = () => {
     const [allTickets, setAllTickets] = useState([])
     const [showEmergencyOnly, setShowEmergencyOnly] = useState(false)
     const [filteredTickets, setFilteredTickets] = useState([])
+    const [searchTerm, setSearchTerm] = useState("")
   
     useEffect(() => {
       getAllTickets().then(ticketsArray => {
@@ -22,28 +25,21 @@ export const TicketList = () => {
         setFilteredTickets(allTickets)
       }
     }, [showEmergencyOnly, allTickets])
-  
-  
+
+    useEffect(() => {
+        const search = allTickets.filter(ticket => ticket.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        setFilteredTickets(search)
+    }, [searchTerm, allTickets])
+    
+
     return (
     <div className="tickets-container">
       <h2>Tickets</h2>
-      <div>
-        <button className="filter-btn btn-primary" onClick={() => {setShowEmergencyOnly(true)}}>Emergency</button>
-        <button className="filter-btn btn-info" onClick={() => {setShowEmergencyOnly(false)}}>Show All</button>
-      </div>
+      <FilterBar setShowEmergencyOnly={setShowEmergencyOnly} setSearchTerm={setSearchTerm}/>
       <article className="tickets">
-        {filteredTickets.map(ticket => {
+        {filteredTickets.map(ticketObj => {
           return (
-            <section className="ticket" key={ticket.id}>
-              <header className="ticket-info">#{ticket.id}</header>
-              <div>{ticket.description}</div>
-              <footer>
-                <div>
-                  <div className="ticket-info">emergency</div>
-                  <div>{ticket.emergency ? "yes" : "no"}</div>
-                </div>
-              </footer>
-            </section>
+            <Ticket ticket={ticketObj} key={ticketObj.id}/>
         )
         })}
       </article>
