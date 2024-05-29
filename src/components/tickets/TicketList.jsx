@@ -7,6 +7,7 @@ import { FilterBar } from "./FilterBar.jsx"
 export const TicketList = ({currentUser}) => {
     const [allTickets, setAllTickets] = useState([])
     const [showEmergencyOnly, setShowEmergencyOnly] = useState(false)
+    const [showOpenOnly, setShowOpenOnly] = useState(false)
     const [filteredTickets, setFilteredTickets] = useState([])
     const [searchTerm, setSearchTerm] = useState("")
   
@@ -38,12 +39,21 @@ export const TicketList = ({currentUser}) => {
         const search = allTickets.filter(ticket => ticket.description.toLowerCase().includes(searchTerm.toLowerCase()))
         setFilteredTickets(search)
     }, [searchTerm, allTickets])
+
+    useEffect(() => {
+      if (showOpenOnly) {
+        const openTickets = allTickets.filter(ticket => ticket.dateCompleted === "")
+        setFilteredTickets(openTickets)
+      } else {
+        setFilteredTickets(allTickets)
+      }
+    }, [showOpenOnly, allTickets])
     
 
     return (
     <div className="tickets-container">
       <h2>Tickets</h2>
-      <FilterBar setShowEmergencyOnly={setShowEmergencyOnly} setSearchTerm={setSearchTerm}/>
+      <FilterBar setShowEmergencyOnly={setShowEmergencyOnly} setShowOpenOnly={setShowOpenOnly} setSearchTerm={setSearchTerm} currentUser={currentUser}/>
       <article className="tickets">
         {filteredTickets.map(ticketObj => {
           return (
