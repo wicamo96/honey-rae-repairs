@@ -1,5 +1,5 @@
 import { Outlet, Route, Routes } from "react-router-dom"
-import { NavBar } from "../components/nav/NavBar.jsx"
+import { EmployeeNav } from "../components/nav/EmployeeNav.jsx"
 import { Welcome } from "../components/welcome/Welcome.jsx"
 import { TicketList } from "../components/tickets/TicketList.jsx"
 import { StaffList } from "../components/staff/StaffList.jsx"
@@ -15,7 +15,7 @@ export const EmployeeViews = ({ currentUser }) => {
                 path="/" 
                 element={
                     <>
-                        <NavBar />
+                        <EmployeeNav />
                         <Outlet />
                     </>
                 }
